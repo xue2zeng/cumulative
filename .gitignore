@@ -1,0 +1,5 @@
+/demo/Java/gradle
+/demo/Java/.gradle
+/demo/Java/.idea
+/demo/Java/build
+/demo/Java/hystrix-httpclient/build
