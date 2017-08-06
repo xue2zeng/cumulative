@@ -1,0 +1,56 @@
+buildscript {
+	repositories {
+		def REPOSITORY_URL = 'http://maven.aliyun.com/nexus/content/groups/public/'
+		all { ArtifactRepository repo ->
+			if(repo instanceof MavenArtifactRepository){
+				def url = repo.url.toString()
+				if (url.startsWith('https://repo1.maven.org/maven2') || url.startsWith('https://jcenter.bintray.com/')) {
+					project.logger.lifecycle "Repository ${repo.url} replaced by $REPOSITORY_URL."
+					remove repo
+				}
+			}
+		}
+		maven {
+            mavenLocal()
+			url REPOSITORY_URL
+		}
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}")
+	}
+}
+
+ext {
+    projectName = rootProject.name
+}
+
+allprojects {
+	repositories {
+		def REPOSITORY_URL = 'http://maven.aliyun.com/nexus/content/groups/public/'
+		all { ArtifactRepository repo ->
+			if(repo instanceof MavenArtifactRepository){
+				def url = repo.url.toString()
+				if (url.startsWith('https://repo1.maven.org/maven2') || url.startsWith('https://jcenter.bintray.com/')) {
+					project.logger.lifecycle "Repository ${repo.url} replaced by $REPOSITORY_URL."
+					remove repo
+				}
+			}
+		}
+		maven {
+            mavenLocal()
+			url REPOSITORY_URL
+		}
+	}
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    group 'com.xue.${projectName}'
+    version '1.0-SNAPSHOT'
+}
