@@ -12,3 +12,7 @@
 [10. 常用模块-script](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/10.常用模块-script.md)  
 [11. 常用模块-get_url，cron，synchronize](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/11.常用模块-get_url，cron，synchronize.md)  
 [12. 常用模块-docker](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/12.常用模块-docker.md)  
+[13. playbook-helloworld](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/13.playbook-helloworld.md)  
+[14. playbook-变量](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/14.playbook-变量.md)  
+[15. playbook-条件和循环](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/15.playbook-条件和循环.md)  
+[16. playbook-自定义环境变量](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/16.playbook-自定义环境变量.md)  
