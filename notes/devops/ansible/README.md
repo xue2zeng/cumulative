@@ -9,5 +9,5 @@
 [7. 常用模块-ping，setup](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/7.常用模块-ping，setup.md)  
 [8. 常用模块-user，group](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/8.常用模块-user，group.md)  
 [9. 常用模块-yum，service](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/9.常用模块-yum，service.md)  
-[10.常用模块-script](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/10.常用模块-script.md)  
-
+[10. 常用模块-script](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/10.常用模块-script.md)  
+[11. 常用模块-get_url，cron，synchronize](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/11.常用模块-get_url，cron，synchronize.md)  
