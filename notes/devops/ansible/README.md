@@ -11,3 +11,4 @@
 [9. 常用模块-yum，service](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/9.常用模块-yum，service.md)  
 [10. 常用模块-script](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/10.常用模块-script.md)  
 [11. 常用模块-get_url，cron，synchronize](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/11.常用模块-get_url，cron，synchronize.md)  
+[12. 常用模块-docker](https://github.com/xue2zeng/cumulative/blob/master/notes/devops/ansible/12.常用模块-docker.md)  
