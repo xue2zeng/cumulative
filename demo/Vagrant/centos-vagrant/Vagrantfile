@@ -1,0 +1,149 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+
+require "fileutils"
+
+Vagrant.require_version ">= 1.6.0"
+
+CLOUD_CONFIG_PATH = File.join(File.dirname(__FILE__), "user-data")
+CONFIG = File.join(File.dirname(__FILE__), "config.rb")
+
+# Defaults for config options defined in CONFIG
+$num_instances = 1
+$update_channel = "7"
+$update_version = "1803_01"
+$instance_name_prefix = "core"
+$enable_serial_logging = false
+$share_home = false
+$vm_gui = false
+$vm_memory = 1024
+$vm_cpus = 1
+$vb_cpuexecutioncap = 100
+$shared_folders = {}
+$forwarded_ports = {}
+
+# Attempt to apply the deprecated environment variable NUM_INSTANCES to
+# $num_instances while allowing config.rb to override it
+if ENV["NUM_INSTANCES"].to_i > 0 && ENV["NUM_INSTANCES"]
+  $num_instances = ENV["NUM_INSTANCES"].to_i
+end
+
+if File.exist?(CONFIG)
+  require CONFIG
+end
+
+# Use old vb_xxx config variables when set
+def vm_gui
+  $vb_gui.nil? ? $vm_gui : $vb_gui
+end
+
+def vm_memory
+  $vb_memory.nil? ? $vm_memory : $vb_memory
+end
+
+def vm_cpus
+  $vb_cpus.nil? ? $vm_cpus : $vb_cpus
+end
+
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  # always use Vagrants insecure key
+  config.ssh.insert_key = false
+  # forward ssh agent to easily ssh into the different machines
+  config.ssh.forward_agent = true
+
+  config.vm.box = "centos-#{$update_channel}"
+
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # NOTE: This will enable public access to the opened port
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  # config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+  # end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+  config.vm.provider :virtualbox do |vb, override|
+    override.vm.box_download_checksum_type = "sha256"
+    override.vm.box_download_checksum = "b24c912b136d2aa9b7b94fc2689b2001c8d04280cf25983123e45b6a52693fb3"
+    override.vm.box_url = "https://cloud.centos.org/centos/7/vagrant/x86_64/images/CentOS-#{$update_channel}-x86_64-Vagrant-#{$update_version}.VirtualBox.box"
+    vb.check_guest_additions = false
+    vb.functional_vboxsf     = false
+  end
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+
+  # plugin conflict
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+    config.vbguest.auto_update = false
+  end
+
+  (1..$num_instances).each do |i| 
+    config.vm.define vm_name = "%s-%02d" % [$instance_name_prefix, i] do |config|
+      config.vm.hostname = vm_name
+    end
+
+    config.vm.provider :virtualbox do |vb|
+      vb.gui = vm_gui
+      vb.memory = vm_memory
+      vb.cpus = vm_cpus
+      vb.customize ["modifyvm", :id, "--cpuexecutioncap", "#{$vb_cpuexecutioncap}"]
+    end
+
+    ip = "172.17.8.#{i+100}"
+    config.vm.network :private_network, ip: ip
+  end
+end
