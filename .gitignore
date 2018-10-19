@@ -3,3 +3,4 @@
 /demo/Java/.idea
 /demo/Java/build
 /demo/Java/hystrix-httpclient/build
+/demo/Vagrant/centos-base-vagrant/.vagrant

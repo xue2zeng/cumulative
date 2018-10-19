@@ -1,0 +1,268 @@
+服务器准备
+node1: master 192.168.61.11
+node2: node 192.168.61.12
+node3: node 192.168.61.13
+
+配置系统相关参数
+
+# 临时禁用selinux
+# 永久关闭 修改/etc/sysconfig/selinux文件设置
+sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+setenforce 0
+
+# 临时关闭swap
+# 永久关闭 注释/etc/fstab文件里swap相关的行
+swapoff -a
+sed -i 's/.*swap.*/#&/' /etc/fstab
+
+# 开启forward
+# Docker从1.13版本开始调整了默认的防火墙规则
+# 禁用了iptables filter表中FOWARD链
+# 这样会引起Kubernetes集群中跨Node的Pod无法通信
+
+iptables -P FORWARD ACCEPT
+
+# 关闭防火墙
+systemctl stop firewalld
+systemctl disable firewalld
+
+# 配置转发相关参数，否则可能会出错
+vi /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+vm.swappiness=0
+
+sysctl --system
+
+# 加载ipvs相关内核模块
+# 如果重新开机，需要重新加载
+modprobe ip_vs
+modprobe ip_vs_rr
+modprobe ip_vs_wrr
+modprobe ip_vs_sh
+modprobe nf_conntrack_ipv4
+lsmod | grep ip_vs
+
+配置hosts解析
+vi /etc/hosts
+192.168.61.11   node1
+192.168.61.12   node2
+192.168.61.13   node3
+
+配置kubernetes yum源
+
+vi /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+exclude=kube*
+
+配置yum源
+
+yum install -y wget
+
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+yum clean all && yum makecache
+
+docker安装依赖
+yum install -y yum-utils device-mapper-persistent-data lvm2
+
+安装
+yum install -y docker-ce kubelet kubeadm kubectl kubernetes-cni --disableexcludes=kubernetes ipvsadm
+
+开启docker，kubelet
+systemctl enable docker
+systemctl enable kubelet.service
+systemctl start docker
+systemctl start kubelet
+
+kubernetes集群不允许开启swap，所以我们需要忽略这个错误
+
+vi /etc/sysconfig/kubelet
+KUBELET_EXTRA_ARGS="--fail-swap-on=false"
+
+Master节点中配置 cgroup driver
+查看 Docker 使用 cgroup driver:
+docker info | grep -i cgroup
+-> Cgroup Driver: cgroupfs
+而 kubelet 使用的 cgroupfs 为system，不一致故有如下修正：
+sudo vim /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+加上如下配置：
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
+或者
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause-amd64:3.1"
+
+# 配置kubelet使用国内pause镜像
+# 配置kubelet的cgroups
+# 获取docker的cgroups
+DOCKER_CGROUPS=$(docker info | grep 'Cgroup' | cut -d' ' -f3)
+echo $DOCKER_CGROUPS
+cat >/etc/sysconfig/kubelet<<EOF
+KUBELET_EXTRA_ARGS="--cgroup-driver=$DOCKER_CGROUPS --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause-amd64:3.1"
+
+重启 kubelet
+systemctl daemon-reload
+systemctl restart kubelet
+
+查看服务启动情况
+journalctl -xeu kubelet
+
+使用如下命令：
+
+kubeadm config images list
+获取当前版本kubeadm 启动需要的镜像
+k8s.gcr.io/kube-apiserver:v1.12.1
+k8s.gcr.io/kube-controller-manager:v1.12.1
+k8s.gcr.io/kube-scheduler:v1.12.1
+k8s.gcr.io/kube-proxy:v1.12.1
+k8s.gcr.io/pause:3.1
+k8s.gcr.io/etcd:3.2.24
+k8s.gcr.io/coredns:1.2.2
+
+基于国内环境使用如下脚本下载至本地，再直接传到服务器上导入即可
+#!/bin/bash
+images=(
+    kube-apiserver:v1.12.1
+    kube-controller-manager:v1.12.1
+    kube-scheduler:v1.12.1
+    kube-proxy:v1.12.1
+    pause:3.1
+    etcd:3.2.24
+    coredns:1.2.2
+)
+
+for imageName in ${images[@]} ; do
+    docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
+    docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName k8s.gcr.io/$imageName
+    docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/$imageName
+done
+
+或者https://github.com/anjia0532/gcr.io_mirror
+
+#!/bin/bash
+images=(
+	kube-proxy-amd64:v1.12.1
+	kube-scheduler-amd64:v1.12.1
+	kube-controller-manager-amd64:v1.12.1
+	kube-apiserver-amd64:v1.12.1
+	etcd-amd64:3.2.24
+	coredns:1.2.2 
+	pause:3.1
+)
+for imageName in ${images[@]} ; do
+docker pull anjia0532/google-containers.$imageName
+docker tag anjia0532/google-containers.$imageName k8s.gcr.io/$imageName
+docker rmi anjia0532/google-containers.$imageName
+done
+
+配置master
+
+vi kubeadm.yaml
+apiVersion: kubeadm.k8s.io/v1alpha2
+kind: MasterConfiguration
+imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
+controllerManagerExtraArgs:
+  horizontal-pod-autoscaler-use-rest-clients: "true"
+  horizontal-pod-autoscaler-sync-period: "10s"
+  node-monitor-grace-period: "10s"
+apiServerExtraArgs:
+  runtime-config: "api/all=true"
+kubernetesVersion: "v1.12.1"
+
+kubeadm init --apiserver-advertise-address=192.168.61.11
+
+# 查看node节点
+kubectl get nodes
+
+使用kubeadm初始化的集群，出于安全考虑Pod不会被调度到Master Node上，也就是说Master Node不参与工作负载。这是因为当前的master节点node1被打上了node-role.kubernetes.io/master:NoSchedule的污点：
+
+kubectl describe node node1 | grep Taint
+Taints:             node-role.kubernetes.io/master:NoSchedule
+
+# 只有网络插件也安装配置完成之后，才能会显示为ready状态
+# 设置master允许部署应用pod，参与工作负载，现在可以部署其他系统组件
+# 如 dashboard, heapster, efk等
+搭建的是测试环境，去掉这个污点使node1参与工作负载
+kubectl taint nodes --all node-role.kubernetes.io/master-
+
+在各节点部署网络插件Weave
+export kubever=$(kubectl version | base64 | tr -d '\n')
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
+
+weava网络插件pod出现CrashloopBackoff问题
+kubectl get svc
+NAME         CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   10.96.0.1    <none>        443/TCP   1h
+在各个节点执行
+route add 10.96.0.1 gw 192.168.61.11
+
+node节点执行
+基于国内环境使用如下脚本下载至本地，再直接传到服务器上导入即可
+#!/bin/bash
+images=(
+    kube-proxy:v1.12.1
+    pause:3.1
+)
+
+for imageName in ${images[@]} ; do
+    docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
+    docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName k8s.gcr.io/$imageName
+    docker rmi registry.cn-hangzhou.aliyuncs.com/google-containers/$imageName
+done
+
+配置node节点加入集群
+kubeadm join 192.168.61.11:6443 --token 2xtyx4.p65zhuialjvdgd5o --discovery-token-ca-cert-hash sha256:5471f61766c9dc8deae92d703b47d3bf42bbe14b5c97444566aaa65d91912892
+
+测试容器间的通信和DNS
+[root@node1 ~]# kubectl run curl --image=radial/busyboxplus:curl -it
+kubectl run --generator=deployment/apps.v1beta1 is DEPRECATED and will be removed in a future version. Use kubectl create instead.
+If you don't see a command prompt, try pressing enter.
+[ root@curl-5cc7b478b6-kq5bg:/ ]$ nslookup kubernetes.default
+Server:    10.96.0.10
+Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local
+
+Name:      kubernetes.default
+Address 1: 10.96.0.1 kubernetes.default.svc.cluster.local
+
+查看coredns配置
+kubectl -n kube-system get configmap coredns -oyaml
+
+从集群中移除Node执行下面的命令
+在master节点上执行：
+kubectl drain node2 --delete-local-data --force --ignore-daemonsets
+kubectl delete node node2
+在node2上执行：
+kubeadm reset
+
+获取token命令
+
+kubectl -n kube-system describe $(kubectl -n kube-system get secret -n kube-system -o name | grep namespace) | grep token
+
+查看具体问题
+kubectl describe pod <kubernetes-pod> -n kube-system
+
+查看日志
+kubectl logs -n kube-system <weave-net-pod> weave
+
+网络
+ip route
+ip -4 -o addr
+iptables-save
+
+
+忘记初始master节点时的node节点加入集群命令怎么办
+
+# 简单方法
+kubeadm token create --print-join-command
+
+# 第二种方法
+token=$(kubeadm token generate)
+kubeadm token create $token --print-join-command --ttl=0
