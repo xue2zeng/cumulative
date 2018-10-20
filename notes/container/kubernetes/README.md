@@ -13,4 +13,5 @@
 
 
 
-该笔记内容来自[深入剖析Kubernetes](https://time.geekbang.org/column/116)
+该笔记内容来自张磊的[深入剖析Kubernetes](https://time.geekbang.org/column/116)
+
