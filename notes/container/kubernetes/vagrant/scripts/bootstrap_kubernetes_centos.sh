@@ -89,6 +89,8 @@ timedatectl set-local-rtc 0
 # 重启依赖于系统时间的服务
 systemctl restart rsyslog 
 systemctl restart crond
+yum install -y ntp
+ntpdate cn.pool.ntp.org
 
 echo "############ Install docker kubelet kubeadm ipvsadm"
 yum install -y yum-utils device-mapper-persistent-data lvm2
