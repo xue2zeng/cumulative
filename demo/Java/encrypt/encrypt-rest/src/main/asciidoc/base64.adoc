@@ -1,0 +1,18 @@
+= 使用S pring Rest Docs 构建Base64加密API文档
+zeng xue <zxue1988@gmail.com>
+{project-version}
+:doctype: book
+:toc: left
+:sectnums:
+
+== 简介
+This is an Base64 encrypt of Spring REST Docs generated documentation.
+
+=== jdk CURL 实例
+include::{snippets}/base64/jdk/curl-request.adoc[]
+
+=== jdk request 实例
+include::{snippets}/base64/jdk/http-request.adoc[]
+
+=== jdk response 实例
+include::{snippets}/base64/jdk/http-response.adoc[]
