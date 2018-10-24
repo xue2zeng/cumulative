@@ -11,7 +11,15 @@
 
 [05.Kubernetes安装篇：kubeadm](./05.Kubernetes安装篇：kubeadm.md)
 
+[06.Kubernetes安装篇：二进制文件](./06.Kubernetes安装篇：二进制文件.md)
 
+[07.Pod.md](./07.Pod.md)
+
+[08.编排之控制模型](./08.编排之控制模型.md)
+
+[09.Deployment](./09.Deployment.md)
+
+[10.StatefulSet](./10.StatefulSet.md)
 
 该笔记内容来自张磊的[深入剖析Kubernetes](https://time.geekbang.org/column/116)
 
