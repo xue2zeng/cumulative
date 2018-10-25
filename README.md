@@ -13,7 +13,6 @@
     * QuickLook
     * Zeal
     * Cmder
-    * 
 * 开发
   * IntelliJ IDEA
   * Oracle VM VirtualBox
