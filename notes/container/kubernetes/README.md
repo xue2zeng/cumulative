@@ -21,5 +21,15 @@
 
 [10.StatefulSet](./10.StatefulSet.md)
 
+[11.DaemonSet](./11.DaemonSet.md)
+
+[12.Job&CronJob](./12.Job&CronJob.md)
+
+[13.声明式API与编程范式](./13.声明式API与编程范式.md)
+
+[14.基于角色权限控制RBAC](./14.基于角色权限控制RBAC.md)
+
+[15.Operator](./15.Operator.md)
+
 该笔记内容来自张磊的[深入剖析Kubernetes](https://time.geekbang.org/column/116)
 
