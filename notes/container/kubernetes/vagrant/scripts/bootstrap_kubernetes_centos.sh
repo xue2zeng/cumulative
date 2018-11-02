@@ -18,6 +18,7 @@ echo "############ Set iptables routed"
 cat <<EOF >  /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
 vm.swappiness = 0
 EOF
 iptables -P FORWARD ACCEPT
