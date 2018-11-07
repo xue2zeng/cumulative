@@ -41,3 +41,7 @@
 
 [02.Dashboard](./components/02.Dashboard.md)
 
+[03.Metrics-server](./components/03.Metrics-server.md)
+
+
+
