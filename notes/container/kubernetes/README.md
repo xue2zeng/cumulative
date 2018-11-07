@@ -33,3 +33,11 @@
 
 该笔记内容来自张磊的[深入剖析Kubernetes](https://time.geekbang.org/column/116)
 
+## 常用组件
+
+[00.Helm](./components/00.Helm.md)
+
+[01.Nginx-ingress](./components/01.Nginx-ingress.md)
+
+[02.Dashboard](./components/02.Dashboard.md)
+
