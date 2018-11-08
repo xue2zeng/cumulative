@@ -1,0 +1,87 @@
+## ---------docker daemon配置部分-----------
+
+## 准备docker相关目录
+- name: Prepare the docker related directory
+  file: name={{ item }} state=directory
+  with_items:
+  - "{{ bin_dir }}"
+  - /etc/docker
+
+- name: Uninstall old versions
+  yum: 
+    name: "{{ item }}"           ## 需要进行安装的一些包名
+    state: absent                ## 安装的包的状态
+  with_items:                    ## 对应上面的item（可以循环操作）
+    - docker
+    - docker-client 
+    - docker-client-latest 
+    - docker-common 
+    - docker-latest 
+    - docker-latest-logrotate 
+    - docker-logrotate 
+    - docker-selinux 
+    - docker-engine-selinux 
+    - docker-engine
+
+- name: Install docker dependencies
+  yum: 
+    name: "{{ item }}"           ## 需要进行安装的一些包名
+    state: present               ## 安装的包的状态
+  with_items:                    ## 对应上面的item（可以循环操作）
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+
+
+- name: Add docker ce repo
+  shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    creates: /etc/yum.repos.d/docker-ce.repo
+    owner: root
+    group: root
+    mode: 0644
+  register: docker_yum_repo
+  
+- name: Make yum cache fast
+  shell: yum makecache fast
+  when: docker_yum_repo.changed
+
+- name: Install docker ce
+  yum:
+    name: "{{ docker_version }}"
+    state: present
+  notify: restart docker
+
+## docker命令自动补全
+- name: docker command auto completion
+  copy: src=docker dest=/etc/bash_completion.d/docker mode=0644
+
+## docker国内镜像加速
+- name: Docker domestic image acceleration
+  template: src=daemon.json.j2 dest=/etc/docker/daemon.json
+
+- name: flush-iptables
+  shell: "iptables -F && iptables -X \
+        && iptables -F -t nat && iptables -X -t nat \
+        && iptables -F -t raw && iptables -X -t raw \
+        && iptables -F -t mangle && iptables -X -t mangle"
+
+## 创建docker的systemd unit文件
+- name: Create docker systemd unit file
+  template: src=docker.service.j2 dest=/etc/systemd/system/docker.service
+  tags: upgrade_docker
+
+## 开机启用docker 服务
+- name: Turn on the docker service
+  shell: systemctl enable docker
+  ignore_errors: true
+
+## 开启docker 服务
+- name: Open the docker service
+  shell: systemctl daemon-reload && systemctl restart docker
+  tags: upgrade_docker
+
+## 可选 ------安装docker查询镜像 tag的小工具----
+# 先要安装轻量JSON处理程序‘jq’，已在 prepare 节点安装
+##- name: 下载 docker-tag
+##  copy: src=docker-tag dest={{ bin_dir }}/docker-tag mode=0755

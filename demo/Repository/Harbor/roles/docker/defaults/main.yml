@@ -1,0 +1,37 @@
+# 国内镜像加速
+REG_MIRROR_1: "https://registry.docker-cn.com"
+REG_MIRROR_2: "https://docker.mirrors.ustc.edu.cn"
+
+# docker日志相关
+LOG_DRIVER: "json-file"
+LOG_LEVEL: "warn"
+LOG_MAX_SIZE: "10m"
+LOG_MAX_FILE: 3
+
+# docker容器存储目录
+STORAGE_DIR: "/var/lib/docker"
+
+---
+# Edition can be one of: 'ce' (Community Edition) or 'ee' (Enterprise Edition).
+docker_edition: 'ce'
+docker_package: "docker-{{ docker_edition }}"
+docker_package_state: present
+docker_version: "18.03.0.ce-1.el7.centos "
+
+# Service options.
+docker_service_state: started
+docker_service_enabled: yes
+docker_restart_handler_state: restarted
+
+# Docker Compose options.
+docker_install_compose: True
+docker_compose_version: "1.22.0"
+docker_compose_path: /usr/local/bin/docker-compose
+
+# Used only for RedHat/CentOS/Fedora.
+docker_yum_repo_url: https://download.docker.com/linux/{{ (ansible_distribution == "Fedora") | ternary("fedora","centos") }}/docker-{{ docker_edition }}.repo
+docker_yum_repo_enable_edge: 0
+docker_yum_repo_enable_test: 0
+
+# A list of users who will be added to the docker group.
+docker_users: []
