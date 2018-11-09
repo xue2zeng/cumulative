@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    consul:
+      discovery:
+        register: false
+server:
+  port: 8990

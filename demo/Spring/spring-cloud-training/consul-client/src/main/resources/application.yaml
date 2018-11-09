@@ -1,0 +1,11 @@
+server:
+  port: 8989
+
+spring:
+  cloud:
+    discovery:
+      serviceName: ${spring.application.name}
+      health-check-path: /actuator/health
+      health-check-interval: 15s
+
+author: xue.zeng

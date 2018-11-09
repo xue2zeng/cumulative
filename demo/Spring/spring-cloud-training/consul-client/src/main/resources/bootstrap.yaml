@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: consul-client
+  consul:
+    host: localhost
+    port: 8500
+    config:
+      enabled: true
+      format: YAML
+      watch:
+        enabled: true
+      prefix: consul-config
+  profiles:
+      active: dev

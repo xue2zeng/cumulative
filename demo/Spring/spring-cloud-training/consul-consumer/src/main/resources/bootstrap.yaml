@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: consul-consumer
+  consul:
+    host: localhost
+    port: 8500
+  profiles:
+      active: dev
