@@ -1,18 +1,17 @@
-package com.xspace.eureka.controller;
+package com.xspace.eureka.ribbon.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class ServiceInstanceRestController {
     @Autowired
-    private DiscoveryClient discoveryClient;
+    private RestTemplate restTemplate;
 
     @RequestMapping("/service-instances")
     public String getServiceInstances() {
-        String services = "Services: " + this.discoveryClient.getServices();
-        return services;
+        return restTemplate.getForObject("http://eureka-client/service-instances", String.class);
     }
 }

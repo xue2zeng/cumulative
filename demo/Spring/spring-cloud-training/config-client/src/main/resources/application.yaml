@@ -1,0 +1,11 @@
+server:
+  port: 8085
+# 2.x版本配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+# 1.x版本配置
+# management.security.enabled=false

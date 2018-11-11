@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: eureka-consumer-feign
+  profiles:
+    active: dev

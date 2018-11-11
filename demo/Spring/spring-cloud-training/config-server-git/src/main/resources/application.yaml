@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/x-_-space/config-repo
+          username: xue.zeng
+          password:
+
+server:
+  port: 8084
