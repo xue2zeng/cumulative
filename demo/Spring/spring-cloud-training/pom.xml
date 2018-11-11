@@ -25,6 +25,9 @@
         <module>eureka-consumer-feign</module>
         <module>consul-client</module>
         <module>consul-consumer</module>
+        <module>config-server-git</module>
+        <module>config-client</module>
+        <module>config-server-eureka</module>
     </modules>
 
     <properties>

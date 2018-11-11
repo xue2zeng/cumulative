@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: config-client-eureka
+  profiles:
+    active: dev
+  cloud:
+    config:
+      name: cloud-config
+      profile: dev
+      label: master
+      discovery:
+        enabled: true
+        service-id: config-server-euraka

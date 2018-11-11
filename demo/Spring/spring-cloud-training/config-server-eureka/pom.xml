@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.xspace</groupId>
-    <artifactId>eureka-server</artifactId>
+    <artifactId>config-server-eureka</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>eureka-server</name>
-    <description>Eureka project for Spring Cloud Training</description>
+    <name>config-server-eureka</name>
+    <description>Config project for Spring Cloud Training</description>
 
     <parent>
         <groupId>com.xspace</groupId>
@@ -26,7 +26,12 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+            <artifactId>spring-cloud-config-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
         <dependency>
@@ -42,11 +47,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-            </plugin>
         </plugins>
     </build>
+
+
 </project>

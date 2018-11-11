@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: config-server-euraka
+  profiles:
+      active: dev
