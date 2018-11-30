@@ -2,6 +2,8 @@
 
 #### Windows
 
+* Chocolatey
+
 * Wow
 * Everything
 * QuickLook
