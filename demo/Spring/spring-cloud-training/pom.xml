@@ -35,8 +35,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
-        <dockerfile.maven.version>1.4.0</dockerfile.maven.version>
-        <docker.image.prefix>springcloud</docker.image.prefix>
+        <dockerfile.maven.version>1.4.9</dockerfile.maven.version>
+        <docker.image.prefix>172.17.9.11:8083/springcloud</docker.image.prefix>
 
     </properties>
 
@@ -97,8 +97,10 @@
                     <executions>
                         <execution>
                             <id>default</id>
+                            <phase>install</phase>
                             <goals>
                                 <goal>build</goal>
+                                <goal>push</goal>
                             </goals>
                             <configuration>
                                 <repository>${docker.image.prefix}/${project.artifactId}</repository>
@@ -106,6 +108,7 @@
                                 <buildArgs>
                                     <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                                 </buildArgs>
+                                <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                             </configuration>
                         </execution>
                     </executions>
@@ -113,4 +116,17 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Nexus Releases</name>
+            <url>http://172.17.9.11:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Nexus Snapshot</name>
+            <url>http://172.17.9.11:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
