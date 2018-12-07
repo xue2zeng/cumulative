@@ -29,8 +29,11 @@
 * Tampermonkey
 * LastPass
 * Octotree
+* Sourcegraph 
 * SwitchyOmega
 * User-Agent Switcher for Chrome
+* Google keep
+* Papier
 
 
 
