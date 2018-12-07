@@ -4,3 +4,4 @@
 /demo/Java/build
 /demo/Java/hystrix-httpclient/build
 /demo/Vagrant/centos-base-vagrant/.vagrant
+/demo/Vagrant/repo-vagrant/.vagrant
