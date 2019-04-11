@@ -5,6 +5,8 @@
 		}
 	],
 	"settings": {
-		"git.ignoreLimitWarning": true
+		"git.ignoreLimitWarning": true,
+		"editor.fontSize": 12,
+		"editor.fontFamily": "Fira Code Medium, Consolas, 'Courier New', monospace"
 	}
 }
