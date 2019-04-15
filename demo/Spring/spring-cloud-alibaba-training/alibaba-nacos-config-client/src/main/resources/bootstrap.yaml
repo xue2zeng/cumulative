@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: alibaba-nacos-config-client
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+#        namespace: b6b80fc0-236a-471c-87d8-f2499f2c7330
+#        group: DEV_GROUP
+#  profiles:
+#    active: dev
+server:
+  port: 8002
+
