@@ -1,132 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.xspace</groupId>
-    <artifactId>spring-cloud-training</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<groupId>com.xspace</groupId>
+	<artifactId>spring-cloud-training</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-    <name>SpringCloudTraining</name>
-    <description>Training project for Spring Cloud</description>
+	<name>SpringCloudTraining</name>
+	<description>Training project for Spring Cloud</description>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.6.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.9.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
 
-    <modules>
-        <module>eureka-server</module>
-        <module>eureka-client</module>
-        <module>eureka-consumer-ribbon</module>
-        <module>eureka-consumer-feign</module>
-        <module>consul-client</module>
-        <module>consul-consumer</module>
-        <module>config-server-git</module>
-        <module>config-client</module>
-        <module>config-server-eureka</module>
-    </modules>
+	<modules>
+		<module>eureka-server</module>
+		<module>eureka-client</module>
+		<module>eureka-consumer-ribbon</module>
+		<module>eureka-consumer-feign</module>
+		<module>consul-client</module>
+		<module>consul-consumer</module>
+		<module>config-server-git</module>
+		<module>config-client</module>
+		<module>config-server-eureka</module>
+		<module>stream-rabbit</module>
+		<module>stream-rabbit-consumer-group</module>
+		<module>stream-rabbit-consumer-self</module>
+		<module>stream-rabbit-content-route</module>
+		<module>stream-rabbit-delayed-message</module>
+		<module>stream-rabbit-automatic-retry</module>
+		<module>stream-rabbit-customize-exception-handler</module>
+		<module>stream-rabbit-dlq-queue</module>
+	</modules>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
 
-        <dockerfile.maven.version>1.4.9</dockerfile.maven.version>
-        <docker.image.prefix>172.17.9.11:8083/springcloud</docker.image.prefix>
+		<dockerfile.maven.version>1.4.9</dockerfile.maven.version>
+		<docker.image.prefix>172.17.9.11:8083/springcloud</docker.image.prefix>
 
-    </properties>
+		<lombok.version>1.18.4</lombok.version>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.0.6.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+	</properties>
 
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Finchley.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>2.0.9.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>RELEASE</version>
-                <scope>compile</scope>
-            </dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Finchley.SR3</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 
-        </dependencies>
-    </dependencyManagement>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>RELEASE</version>
+				<scope>compile</scope>
+			</dependency>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <!-- defined in spring-cloud-starter-parent pom (as documentation hint),
-                        but needs to be repeated here -->
-                    <configuration>
-                        <requiresUnpack>
-                            <dependency>
-                                <groupId>com.netflix.eureka</groupId>
-                                <artifactId>eureka-core</artifactId>
-                            </dependency>
-                            <dependency>
-                                <groupId>com.netflix.eureka</groupId>
-                                <artifactId>eureka-client</artifactId>
-                            </dependency>
-                        </requiresUnpack>
-                    </configuration>
-                </plugin>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+				<optional>true</optional>
+			</dependency>
 
-                <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>dockerfile-maven-plugin</artifactId>
-                    <version>${dockerfile.maven.version}</version>
-                    <executions>
-                        <execution>
-                            <id>default</id>
-                            <phase>install</phase>
-                            <goals>
-                                <goal>build</goal>
-                                <goal>push</goal>
-                            </goals>
-                            <configuration>
-                                <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                                <tag>${project.version}</tag>
-                                <buildArgs>
-                                    <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-                                </buildArgs>
-                                <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+		</dependencies>
+	</dependencyManagement>
 
-    <distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <name>Nexus Releases</name>
-            <url>http://172.17.9.11:8081/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus</id>
-            <name>Nexus Snapshot</name>
-            <url>http://172.17.9.11:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<!-- defined in spring-cloud-starter-parent pom (as documentation hint),
+							but needs to be repeated here -->
+					<configuration>
+						<requiresUnpack>
+							<dependency>
+								<groupId>com.netflix.eureka</groupId>
+								<artifactId>eureka-core</artifactId>
+							</dependency>
+							<dependency>
+								<groupId>com.netflix.eureka</groupId>
+								<artifactId>eureka-client</artifactId>
+							</dependency>
+						</requiresUnpack>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>com.spotify</groupId>
+					<artifactId>dockerfile-maven-plugin</artifactId>
+					<version>${dockerfile.maven.version}</version>
+					<executions>
+						<execution>
+							<id>default</id>
+							<phase>install</phase>
+							<goals>
+								<goal>build</goal>
+								<goal>push</goal>
+							</goals>
+							<configuration>
+								<repository>${docker.image.prefix}/${project.artifactId}</repository>
+								<tag>${project.version}</tag>
+								<buildArgs>
+									<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+								</buildArgs>
+								<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<name>Nexus Releases</name>
+			<url>http://172.17.9.11:8081/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus</id>
+			<name>Nexus Snapshot</name>
+			<url>http://172.17.9.11:8081/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
