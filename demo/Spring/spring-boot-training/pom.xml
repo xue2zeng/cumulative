@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.1.1.RELEASE</version>
+    <version>2.1.4.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.xspace</groupId>
@@ -16,7 +16,9 @@
   <description>Demo project for Spring Boot</description>
 
   <modules>
+		<module>spring-boot-mybatis</module>
     <module>spring-boot-shiro</module>
+		<module>spring-boot-webflux</module>
   </modules>
 
   <properties>
@@ -24,7 +26,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
+    <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
     <spring.shiro.version>1.4.0</spring.shiro.version>
     <mysql.connection.version>8.0.13</mysql.connection.version>
     <druid.version>1.1.12</druid.version>
@@ -32,9 +34,12 @@
 
     <lombok.version>1.18.4</lombok.version>
     <guava.version>19.0</guava.version>
+    <reactor.version>3.2.8.RELEASE</reactor.version>
 
     <mybatis.spring.boot.versoin>2.0.0</mybatis.spring.boot.versoin>
     <mybatis.mapper.version>2.1.4</mybatis.mapper.version>
+
+		<apache.commons.lang.version>3.8.1</apache.commons.lang.version>
 
     <junit.jupiter.version>5.3.2</junit.jupiter.version>
 
@@ -89,6 +94,17 @@
         <artifactId>guava</artifactId>
         <version>${guava.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.projectreactor</groupId>
+        <artifactId>reactor-core</artifactId>
+        <version>${reactor.version}</version>
+      </dependency>
+			<dependency>
+				<groupId>io.projectreactor</groupId>
+				<artifactId>reactor-test</artifactId>
+				<version>${reactor.version}</version>
+				<scope>test</scope>
+			</dependency>
 
       <dependency>
         <groupId>org.mybatis.spring.boot</groupId>
@@ -100,6 +116,12 @@
         <artifactId>mapper-spring-boot-starter</artifactId>
         <version>${mybatis.mapper.version}</version>
       </dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${apache.commons.lang.version}</version>
+			</dependency>
 
       <dependency>
         <groupId>org.springframework.boot</groupId>
