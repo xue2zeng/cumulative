@@ -6,3 +6,24 @@
 /demo/Vagrant/centos-base-vagrant/.vagrant
 /demo/Vagrant/repo-vagrant/.vagrant
 *.log
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### Gradle ###
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat

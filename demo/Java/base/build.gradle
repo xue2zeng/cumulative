@@ -1,0 +1,30 @@
+plugins {
+  id 'java'
+}
+
+group 'com.xspace.java11.feature'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+[compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+
+repositories {
+  maven {
+    url "http://maven.aliyun.com/nexus/content/groups/public/"
+  }
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  compileOnly 'org.projectlombok:lombok:1.18.8'
+  annotationProcessor 'org.projectlombok:lombok:1.18.8'
+  compile(
+          'org.slf4j:slf4j-api:1.7.26',
+          'ch.qos.logback:logback-classic:1.2.3',
+          'com.google.guava:guava:28.0-jre'
+  )
+}
+
