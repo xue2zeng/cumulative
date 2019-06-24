@@ -1,10 +1,17 @@
+### Go ###
+/demo/Go/bin
+
+### Java ###
 /demo/Java/gradle
 /demo/Java/.gradle
 /demo/Java/.idea
 /demo/Java/build
 /demo/Java/hystrix-httpclient/build
+
+### Vagrant ###
 /demo/Vagrant/centos-base-vagrant/.vagrant
 /demo/Vagrant/repo-vagrant/.vagrant
+
 *.log
 
 ### IntelliJ IDEA ###
