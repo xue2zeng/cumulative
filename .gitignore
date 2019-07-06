@@ -1,5 +1,9 @@
 ### Go ###
-/demo/Go/bin
+bin
+pkg
+github.com
+golang.org
+
 
 ### Java ###
 /demo/Java/gradle
