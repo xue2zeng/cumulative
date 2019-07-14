@@ -9,3 +9,12 @@ CREATE TABLE `subject` (
           `hash` char(32) NOT NULL DEFAULT '' COMMENT '哈希值',
           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2046 DEFAULT CHARSET=utf8 COMMENT='题目表';
+
+
+INSERT INTO `subject` (`id`, `img`, `option`, `answer_key`, `answer_value`, `create_time`, `status`, `hash`)
+VALUES
+	(1, '/img/cut/yaoshen.webp', '{ \"A\": \"无人区\", \"B\": \"人在囧途\", \"C\": \"我不是药神\", \"D\": \"心花路放\" }', 'C', '我不是药神', '2018-09-08 12:34:06', 0, '');
+
+INSERT INTO `subject` (`id`, `img`, `option`, `answer_key`, `answer_value`, `create_time`, `status`, `hash`)
+VALUES
+	(2, '/img/cut/bat.webp', '{ \"A\": \"黑暗骑士崛起\", \"B\": \"蝙蝠侠大战超人\", \"C\": \"侠影之谜\", \"D\": \"黑暗骑士\" }', 'D', '黑暗骑士', '2018-09-08 12:34:19', 0, '');
