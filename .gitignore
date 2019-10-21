@@ -3,6 +3,8 @@ bin
 pkg
 github.com
 golang.org
+gopkg.in
+go.uber.org
 
 
 ### Java ###
@@ -38,3 +40,6 @@ build/
 gradle/
 gradlew
 gradlew.bat
+
+### VS Code ###
+.vscode

@@ -45,7 +45,7 @@ func euler() {
 func triangle() {
 	var a, b int = 3, 4
 	var c int
-	c = int(math.Sqrt(float64(a * a + b * b)))
+	c = int(math.Sqrt(float64(a*a + b*b)))
 	fmt.Println(c)
 }
 
@@ -68,7 +68,7 @@ func enums() {
 	fmt.Println(cpp, javascript, python, golang)
 
 	const (
-		b = 1 << (10*iota)
+		b = 1 << (10 * iota)
 		kb
 		mb
 		gb

@@ -69,3 +69,11 @@ func main() {
 		}
 	}
 }
+
+func test() {
+	var ch chan string
+	select {
+	case n := <-ch:
+		fmt.Println("Received from ch:", n)
+	}
+}
