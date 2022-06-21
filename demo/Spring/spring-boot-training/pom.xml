@@ -28,7 +28,7 @@
 
     <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
     <spring.shiro.version>1.4.0</spring.shiro.version>
-    <mysql.connection.version>8.0.13</mysql.connection.version>
+    <mysql.connection.version>8.0.28</mysql.connection.version>
     <druid.version>1.1.12</druid.version>
     <ehcache.version>2.10.6</ehcache.version>
 
